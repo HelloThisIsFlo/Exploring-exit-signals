@@ -13,7 +13,7 @@
 ########################################################
 
 function verbose_exit {
-    echo ''
+    echo "" 
     echo "SLEEP: Received $1, wait for 1 sec ..."
     sleep 1 
     echo "SLEEP: Exiting in 1 more seconds ..."
