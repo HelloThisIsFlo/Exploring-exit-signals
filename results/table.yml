@@ -1,0 +1,269 @@
+sleep.sh:
+    In Terminal:
+        (cli):
+            CTRL-C:
+                Explain what happens here.<br>
+                New version working
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+
+    In Docker: 
+        run -it:
+            CTRL-C:
+                What happen when multilines ????<br>
+                Here is what happens :D :D <br>
+                I'm really affraid it looks like shit OOp<br>
+            Kill Base:
+                What happen when multilines with special char<br>
+                Here is what happens :D :D <br>
+                I'm really affraid it looks like shit OO<br>
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run -d:
+            CTRL-C:
+                NOT APPLICABLE
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+
+exec sleep.sh:
+    In Terminal:
+        (cli):
+            CTRL-C:
+                Explain what happens here. Bla bla bla
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+
+    In Docker: 
+        run -it:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run -d:
+            CTRL-C:
+                NOT APPLICABLE
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+
+trap.sh -> sleep.sh:
+    In Terminal:
+        (cli):
+            CTRL-C:
+                Explain what happens here. Bla bla bla
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+        CTRL-C:
+            Explain what happens here. Bla bla bla
+        Kill Base:
+            Explain what happens here. Bla bla bla
+        Kill Nested:
+            NOT APPLICABLE
+
+    In Docker: 
+        run -it:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run -d:
+            CTRL-C:
+                NOT APPLICABLE
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+
+exec trap.sh -> sleep.sh:
+    In Terminal:
+        (cli):
+            CTRL-C:
+                Explain what happens here. Bla bla bla
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+
+    In Docker: 
+        run -it:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run -d:
+            CTRL-C:
+                NOT APPLICABLE
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+
+trap.sh -> exec sleep.sh:
+    In Terminal:
+        (cli):
+            CTRL-C:
+                Explain what happens here. Bla bla bla
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+        CTRL-C:
+            Explain what happens here. Bla bla bla
+        Kill Base:
+            Explain what happens here. Bla bla bla
+        Kill Nested:
+            NOT APPLICABLE
+
+    In Docker: 
+        run -it:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run -d:
+            CTRL-C:
+                NOT APPLICABLE
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+
+exec trap.sh -> exec sleep.sh:
+    In Terminal:
+        (cli):
+            CTRL-C:
+                Explain what happens here. Bla bla bla
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+
+    In Docker: 
+        run -it:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run:
+            CTRL-C:
+                Here is what happens :D :D 
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
+        run -d:
+            CTRL-C:
+                NOT APPLICABLE
+            Kill Base:
+                Explain what happens here. Bla bla bla
+            Kill Nested:
+                NOT APPLICABLE
+            Docker stop:
+                asdfasd
+
