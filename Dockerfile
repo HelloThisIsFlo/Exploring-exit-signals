@@ -5,4 +5,5 @@ FROM ubuntu
 COPY ./trap.sh /trap.sh
 COPY ./trap_exec.sh /trap_exec.sh
 COPY ./sleep.sh /sleep.sh
+COPY ./thirdlayer.sh /thirdlayer.sh
 
