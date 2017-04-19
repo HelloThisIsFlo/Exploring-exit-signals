@@ -1,206 +1,212 @@
+Results: 
+    SIGKILL:
+        Sigkill kill without any warning the targeted process.
+        But kills ONLY the targeted process. No cascade !!
+        Not possible to trap.
+        If process has childrens, they become orphans. (And get attached to init (pid 1))
+
+Random notes:
+    Cannot kill SIGKILL PID1 on Docker. 
+    But no problem kill with SIGTERM (graceful shutdown)
+
+Note: 
+    Docker`kill`vs`exec kill`:
+        PID1:
+            To directly send a kill signal to the process PID1 of a container
+            => Use `docker kill --signal SIGXXX CONTAINER`
+
+            For other processes 
+            => Use `docker exec CONTAINER kill -X PID`
+
+            For PID1 the difference in using `kill -signal=SIGXX` and `exec kill -SIGXX 1`
+            => Can NOT send a SIGKILL to PID1 from inside the container.
+            => No problems with other signals SIGINT/SIGTERM (Graceful shutdown)
+        Default:
+            Without arguments `docker kill` sends a SIGKILL.
+            Without arguments `docker exec kill` sends a SIGTERM.
+    StandardOutputOnDetachedMode:
+        To view standard output on detached mode
+        => Use `docker logs puzzle`
+        => `-f` option to follow in real time
+    PID1OnDocker:
+        When the PID1 is killed, the docker container is destroyed.
+        No matter if orphan processes are still there.
+
 sleep.sh:
     In Terminal:
         (cli):
             CTRL-C:
-                Explain what happens here.<br>
-                New version working
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
+                SIGINT TRAPPED by sleep.sh
+            SIGTERM Base:
+                SIGTERM TRAPPED by sleep.sh
+            SIGTERM Nested:
                 NOT APPLICABLE
 
     In Docker: 
         run -it:
             CTRL-C:
-                What happen when multilines ????<br>
-                Here is what happens :D :D <br>
-                I'm really affraid it looks like shit OOp<br>
-            Kill Base:
-                What happen when multilines with special char<br>
-                Here is what happens :D :D <br>
-                I'm really affraid it looks like shit OO<br>
-                Explain what happens here. Bla bla bla
-            Kill Nested:
+                SIGINT TRAPPED by sleep.sh
+            SIGTERM Base (docker kill --signal SIGTERM):
+                SIGTERM TRAPPED by sleep.sh
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
-                asdfasd
+                SIGTERM TRAPPED by sleep.sh
 
         run:
             CTRL-C:
-                Here is what happens :D :D 
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
+                SIGINT TRAPPED by sleep.sh
+            SIGTERM Base:
+                SIGTERM TRAPPED by sleep.sh
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
-                asdfasd
+                SIGTERM TRAPPED by sleep.sh
 
         run -d:
             CTRL-C:
                 NOT APPLICABLE
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Base:
+                SIGTERM TRAPPED by sleep.sh
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
-                asdfasd
+                SIGTERM TRAPPED by sleep.sh
 
 
 exec sleep.sh:
     In Terminal:
         (cli):
-            CTRL-C:
-                Explain what happens here. Bla bla bla
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
+            Same as `sleep.sh` (without `exec`)
 
     In Docker: 
         run -it:
-            CTRL-C:
-                Here is what happens :D :D 
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
-            Docker stop:
-                asdfasd
+            Same as `sleep.sh` (without `exec`)
 
         run:
-            CTRL-C:
-                Here is what happens :D :D 
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
-            Docker stop:
-                asdfasd
+            Same as `sleep.sh` (without `exec`)
 
         run -d:
-            CTRL-C:
-                NOT APPLICABLE
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
-            Docker stop:
-                asdfasd
+            Same as `sleep.sh` (without `exec`)
 
 
 trap.sh -> sleep.sh:
     In Terminal:
         (cli):
             CTRL-C:
-                Explain what happens here. Bla bla bla
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
-        CTRL-C:
-            Explain what happens here. Bla bla bla
-        Kill Base:
-            Explain what happens here. Bla bla bla
-        Kill Nested:
-            NOT APPLICABLE
+                SIGINT TRAPPED by sleep.sh
+                Then
+                SIGINT TRAPPED by trap.sh
+            SIGTERM Base:
+                Nothing happens !!
+                SIGTERM `trap.sh` but still waiting on `sleep.sh`
+            SIGTERM Nested:
+                SIGINT TRAPPED by `sleep.sh`
+                Then
+                `trap.sh` exits normally
 
     In Docker: 
         run -it:
             CTRL-C:
-                Here is what happens :D :D 
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
+                SIGINT TRAPPED by sleep.sh
+                Then
+                SIGINT TRAPPED by trap.sh
+            SIGTERM Base:
+                Nothing happens !!
+                SIGTERM `trap.sh` but still waiting on `sleep.sh`
+            SIGTERM Nested:
+                SIGINT TRAPPED by `sleep.sh`
+                Then
+                `trap.sh` exits normally
             Docker stop:
-                asdfasd
+                Send SIGTERM, nothing happens. 
+                SIGTERM only sent to PID1 with `docker stop`
+                PID1=`trap.sh` still waiting on `sleep.sh`
+
+                THEN after delay
+                Send SIGKILL, `trap.sh` is killed and container is destroyed
 
         run:
             CTRL-C:
-                Here is what happens :D :D 
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
+                Nothing happens !!
+                Without `-it` option, signals only sent to PID1 !!
+                SIGINT `trap.sh`(PID1) but still waiting on `sleep.sh`
+            SIGTERM Base:
+                Nothing happens !!
+                SIGTERM `trap.sh` but still waiting on `sleep.sh`
+            SIGTERM Nested:
+                SIGINT TRAPPED by `sleep.sh`
+                Then
+                `trap.sh` exits normally
             Docker stop:
-                asdfasd
+                Send SIGTERM, nothing happens. 
+                SIGTERM only sent to PID1 with `docker stop`
+                PID1=`trap.sh` still waiting on `sleep.sh`
+
+                THEN after delay
+                Send SIGKILL, `trap.sh` is killed and container is destroyed
 
         run -d:
             CTRL-C:
                 NOT APPLICABLE
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
+            SIGTERM Base:
+                SIGTERM `trap.sh` but still waiting on `sleep.sh`
+            SIGTERM Nested:
+                SIGINT TRAPPED by `sleep.sh`
+                Then
+                `trap.sh` exits normally
             Docker stop:
-                asdfasd
+                Send SIGTERM, nothing happens. 
+                SIGTERM only sent to PID1 with `docker stop`
+                PID1=`trap.sh` still waiting on `sleep.sh`
+
+                THEN after delay
+                Send SIGKILL, `trap.sh` is killed and container is destroyed
 
 
 exec trap.sh -> sleep.sh:
     In Terminal:
         (cli):
-            CTRL-C:
-                Explain what happens here. Bla bla bla
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
+            Same as `trap.sh -> sleep.sh` (without `exec`)
 
     In Docker: 
         run -it:
-            CTRL-C:
-                Here is what happens :D :D 
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
-            Docker stop:
-                asdfasd
+            Same as `trap.sh -> sleep.sh` (without `exec`)
 
         run:
-            CTRL-C:
-                Here is what happens :D :D 
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
-            Docker stop:
-                asdfasd
+            Same as `trap.sh -> sleep.sh` (without `exec`)
 
         run -d:
-            CTRL-C:
-                NOT APPLICABLE
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
-                NOT APPLICABLE
-            Docker stop:
-                asdfasd
+            Same as `trap.sh -> sleep.sh` (without `exec`)
 
 
 trap.sh -> exec sleep.sh:
     In Terminal:
         (cli):
             CTRL-C:
+                SIGINT TRAPPED by sleep.sh
+                But then nothing happens!!
+                This is because exec REPLACED the current process with the new one.
+                It replaced `trap.sh` with `sleep.sh`
+                All the lines AFTER `exec` will never run
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Base:
-                Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
         CTRL-C:
             Explain what happens here. Bla bla bla
-        Kill Base:
+        SIGTERM Base:
             Explain what happens here. Bla bla bla
-        Kill Nested:
+        SIGTERM Nested:
             NOT APPLICABLE
 
     In Docker: 
         run -it:
             CTRL-C:
                 Here is what happens :D :D 
-            Kill Base:
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
                 asdfasd
@@ -208,9 +214,9 @@ trap.sh -> exec sleep.sh:
         run:
             CTRL-C:
                 Here is what happens :D :D 
-            Kill Base:
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
                 asdfasd
@@ -218,9 +224,9 @@ trap.sh -> exec sleep.sh:
         run -d:
             CTRL-C:
                 NOT APPLICABLE
-            Kill Base:
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
                 asdfasd
@@ -231,18 +237,18 @@ exec trap.sh -> exec sleep.sh:
         (cli):
             CTRL-C:
                 Explain what happens here. Bla bla bla
-            Kill Base:
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
 
     In Docker: 
         run -it:
             CTRL-C:
                 Here is what happens :D :D 
-            Kill Base:
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
                 asdfasd
@@ -250,9 +256,9 @@ exec trap.sh -> exec sleep.sh:
         run:
             CTRL-C:
                 Here is what happens :D :D 
-            Kill Base:
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
                 asdfasd
@@ -260,9 +266,9 @@ exec trap.sh -> exec sleep.sh:
         run -d:
             CTRL-C:
                 NOT APPLICABLE
-            Kill Base:
+            SIGTERM Base:
                 Explain what happens here. Bla bla bla
-            Kill Nested:
+            SIGTERM Nested:
                 NOT APPLICABLE
             Docker stop:
                 asdfasd

@@ -77,43 +77,17 @@ sleep.sh:
 exec sleep.sh:
     In Terminal:
         (cli):
-            CTRL-C:
-                SIGINT TRAPPED by exec_sleep.sh
-            SIGTERM Base:
-                SIGTERM TRAPPED by exec_sleep.sh
-            SIGTERM Nested:
-                NOT APPLICABLE
+            Same as `sleep.sh` (without `exec`)
 
     In Docker: 
         run -it:
-            CTRL-C:
-                SIGINT TRAPPED by exec_sleep.sh
-            SIGTERM Base:
-                SIGTERM TRAPPED by exec_sleep.sh
-            SIGTERM Nested:
-                NOT APPLICABLE
-            Docker stop:
-                SIGTERM TRAPPED by exec_sleep.sh
+            Same as `sleep.sh` (without `exec`)
 
         run:
-            CTRL-C:
-                SIGINT TRAPPED by exec_sleep.sh
-            SIGTERM Base:
-                SIGTERM TRAPPED by exec_sleep.sh
-            SIGTERM Nested:
-                NOT APPLICABLE
-            Docker stop:
-                SIGTERM TRAPPED by exec_sleep.sh
+            Same as `sleep.sh` (without `exec`)
 
         run -d:
-            CTRL-C:
-                NOT APPLICABLE
-            SIGTERM Base:
-                SIGTERM TRAPPED by exec_sleep.sh
-            SIGTERM Nested:
-                NOT APPLICABLE
-            Docker stop:
-                SIGTERM TRAPPED by exec_sleep.sh
+            Same as `sleep.sh` (without `exec`)
 
 
 trap.sh -> sleep.sh:
@@ -214,88 +188,97 @@ trap.sh -> exec sleep.sh:
                 But then nothing happens!!
                 This is because exec REPLACED the current process with the new one.
                 It replaced `trap.sh` with `sleep.sh`
-            All the lines AFTER `exec` will never run:q
+                All the lines AFTER `exec` will never run
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
-        CTRL-C:
-            Explain what happens here. Bla bla bla
-        SIGTERM Base:
-            Explain what happens here. Bla bla bla
-        SIGTERM Nested:
-            NOT APPLICABLE
+                `trap.sh` has been replaced by `sleep.sh` on the `exec` command
+                Not possible to kill `trap.sh` since it doesn't exist anymore
+            SIGTERM Nested:
+                SIGINT TRAPPED by sleep.sh
+                But then nothing happens!!
+                This is because exec REPLACED the current process with the new one.
 
     In Docker: 
         run -it:
             CTRL-C:
-                Here is what happens :D :D 
+                Same as "In Terminal"
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
+                Same as "In Terminal"
+            SIGTERM Nested:
+                Same as "In Terminal"
             Docker stop:
-                asdfasd
+                SIGINT TRAPPED by sleep.sh
+                `docker stop` act on PID=1
+                `exec sleep.sh` puts `sleep.sh` as PID=1
+                Therefore `sleep.sh` receive SIGTERM sent by `docker stop`
 
         run:
             CTRL-C:
-                Here is what happens :D :D 
+                Same as "In Terminal"
+                Because `CTRL-C` without `-it` options, only send SIGINT to PID=1
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
+                Same as "In Terminal"
+            SIGTERM Nested:
+                Same as "In Terminal"
             Docker stop:
-                asdfasd
+                Same as `run -it`
 
         run -d:
             CTRL-C:
                 NOT APPLICABLE
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
+            SIGTERM Nested:
+                Same as "In Terminal"
             Docker stop:
-                asdfasd
+                Same as `run` & `run -it`
 
 
 exec trap.sh -> exec sleep.sh:
     In Terminal:
         (cli):
             CTRL-C:
-                Explain what happens here. Bla bla bla
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
+            SIGTERM Nested:
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
 
     In Docker: 
         run -it:
             CTRL-C:
-                Here is what happens :D :D 
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
+            SIGTERM Nested:
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
             Docker stop:
-                asdfasd
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
 
         run:
             CTRL-C:
-                Here is what happens :D :D 
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
+            SIGTERM Nested:
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
             Docker stop:
-                asdfasd
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
 
         run -d:
             CTRL-C:
                 NOT APPLICABLE
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
             SIGTERM Base:
-                Explain what happens here. Bla bla bla
-            SIGTERM Nested:
                 NOT APPLICABLE
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
+            SIGTERM Nested:
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
             Docker stop:
-                asdfasd
+                Same as `trap.sh -> exec sleep.sh` (without first `exec`)
 
